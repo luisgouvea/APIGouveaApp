@@ -11,17 +11,18 @@ namespace APIGouveaApp.Controllers
     public class OrderController : ApiController
     {
         [HttpGet]
-        public HttpResponseMessage GetOrderByNumber()
+        public HttpResponseMessage GetOrderByNumber([FromUri] string numberOrder)
         {
-
-            List<ItemOrder> itensOrder = Persistencia.DD.OrderDD.GetOrderByNumber("4009");
+            List<ItemOrder> itensOrder = Persistencia.DD.OrderDD.GetOrderByNumber(numberOrder);
             for (int i = 0; i < itensOrder.Count - 1; i++)
             {
                 ItemOrder itemTarget = itensOrder[i];
                 Persistencia.DD.OrderDD.GetItemBarcode(ref itemTarget);
                 Persistencia.DD.OrderDD.GetItemDescription(ref itemTarget);
             }
-            return Request.CreateResponse(HttpStatusCode.OK, itensOrder);
+            ListItemOrder listItemOrder = new ListItemOrder();
+            listItemOrder.listItemOder = itensOrder;
+            return Request.CreateResponse(HttpStatusCode.OK, listItemOrder);
         }
     }
 }
