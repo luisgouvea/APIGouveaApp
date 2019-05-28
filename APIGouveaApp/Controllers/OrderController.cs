@@ -14,14 +14,16 @@ namespace APIGouveaApp.Controllers
         public HttpResponseMessage GetOrderByNumber([FromUri] string numberOrder)
         {
             List<ItemOrder> itensOrder = Persistencia.DD.OrderDD.GetOrderByNumber(numberOrder);
-            for (int i = 0; i < itensOrder.Count - 1; i++)
+            List<ItemOrder> itemnew = new List<ItemOrder>();
+            for (int i = 0; i < itensOrder.Count; i++)
             {
                 ItemOrder itemTarget = itensOrder[i];
                 Persistencia.DD.OrderDD.GetItemBarcode(ref itemTarget);
                 Persistencia.DD.OrderDD.GetItemDescription(ref itemTarget);
+                itemnew.Add(itemTarget);
             }
             ListItemOrder listItemOrder = new ListItemOrder();
-            listItemOrder.listItemOder = itensOrder;
+            listItemOrder.listItemOder = itemnew;
             return Request.CreateResponse(HttpStatusCode.OK, listItemOrder);
         }
     }
